@@ -1,3 +1,6 @@
 a = 5
 b = 7
-print(max(a,b))
+def sum(a,b):
+    a = a+b
+sum(a,b)
+print(a)
