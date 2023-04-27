@@ -164,14 +164,14 @@ class Tree:
                 else:
                     p.left = r
 
-                temp = r #saving into temp for later use (rotation)
+                temp1 = r #saving into temp for later use (rotation)
                 # del root
                 
             else:    
                 p = temp.parent
                 p.left = temp.right
                 
-                temp = temp.right #saving into temp for later use
+                temp1 = temp.right #saving into temp for later use
             
         elif l is not None:
             temp = l
@@ -189,13 +189,13 @@ class Tree:
                 else:
                     p.left = l
 
-                temp = l #saving the new node into temp for later use(rotation)
+                temp1 = l #saving the new node into temp for later use(rotation)
                 # del root
             else:
                 p = temp.parent
                 p.right = temp.left
                 
-                temp = temp.left #saving into temp for later use
+                temp1 = temp.left #saving into temp for later use
 
         else:
             #no child (leaf node)
@@ -209,18 +209,18 @@ class Tree:
             else:
                 root.parent.right = None
             
-            temp = root.parent #saving for later use
+            temp1 = root #saving for later use
 
     
         #now rotation part
-        temp1 = temp.parent
+        # temp1 = temp.parent
         balance = self.getBalance(temp1)
         while temp1 is not None:
-            temp1 = temp1.parent
             balance = self.getBalance(temp1)
-
+            # print(balance)
+            print(temp1.key, balance)
             if balance > 1 or balance < -1:
-                if balance > 2: #larger left subtree
+                if balance > 1: #larger left subtree
                     temp2 = temp1.left
                     balance2 = self.getBalance(temp2)
 
@@ -262,6 +262,10 @@ class Tree:
 
                         self.leftrotate(temp1)
                         temp1 = temp2.parent
+            else:
+                temp1 = temp1.parent
+
+            
                 
             
         
@@ -298,14 +302,20 @@ class Tree:
         
 
 root = Tree()
-root.insert(4)
 root.insert(6)
-root.insert(3)
+root.insert(4)
+root.insert(8)
+root.insert(5)
+root.insert(7)
 root.insert(2)
+root.insert(10)
 root.insert(1)
+root.insert(3)
+root.insert(9)
+root.insert(11)
 root.printTree(root.head)
 print()
-root.delete(root.findNode(root.head,3))
+root.delete(root.findNode(root.head,4))
 # root.insert(9)
 root.printTree(root.head)
 print()
