@@ -1,5 +1,3 @@
-
-
 class Tree:
     class Node:
         def __init__(self, key):
@@ -41,6 +39,152 @@ class Tree:
 
                 temp = temp.right
 
+        #balancing
+        temp1 = n
+        temp2 = n.parent
+        if temp2 is None:
+            return
+        temp3 = temp2.parent
+
+        while temp3 is not None:
+            if self.getBalance(temp3) == -2:
+
+                #RL case
+                if temp1 is not temp2.right:
+                    self.rightrotate(temp2) #now temp2 is the right child of temp1
+                    
+                    #fixing it (making it as if it was RR in the first place)
+                    temp2 = temp1
+                    temp1 = temp2.right
+
+                self.leftrotate(temp3)
+                temp3 = temp2.parent
+
+            elif self.getBalance(temp3) == 2:
+
+                if temp1 is not temp2.left:
+                    self.leftrotate(temp2)
+
+                    temp2 = temp1
+                    temp1 = temp2.left
+
+                self.rightrotate(temp3)
+                temp3 = temp3.parent
+
+            else:
+                temp3 = temp3.parent
+                temp2 = temp2.parent
+                temp1 = temp1.parent
+
+                    
+
+
+    def leftrotate(self, root):
+        r  = root.right
+        p = root.parent
+
+        #transferring the right left child (to the other side)
+        if r.left is not None:
+            root.right = r.left
+            r.left.parent = root
+        else:
+            root.right = None
+
+        #updating the parent of the right child
+        if p is not None:
+            if p.right is root:
+                p.right = r
+            else:
+                p.left = r
+            
+            r.parent = p
+        else:
+            self.head = r
+            r.parent = None
+
+        #making the rotation
+        r.left = root
+        root.parent = r
+
+    def rightrotate(self, root):
+        p = root.parent
+        l = root.left
+
+        #transferring the left-right child (to the other side)
+        if l.right is not None:
+            root.left = l.right
+            l.right.parent = root
+        else:
+            root.left = None
+
+        #updating the parent of the left child
+        if p is not None:
+            if p.right == root:
+                p.right = l
+            else:
+                p.left = l
+
+            l.parent = p
+        else:
+            self.head = l
+            l.parent = None
+
+        #making the rotation
+        l.right = root
+        root.parent = l
+    def findNode(self, root,value):
+        if root.key == value:
+            return root
+        
+        if value<root.key:
+            return self.findNode(root.left, value)
+        else:
+            return self.findNode(root.right, value)
+    def delete(self, root):
+        r = root.right
+        l = root.left
+
+        if r is not None:
+            temp = r
+            #going to the left most node of the right sub tree
+            while temp.left is not None:
+                temp = temp.left
+
+            #changing the value of the to-be deleted node
+            root.key = temp.key
+
+            p = temp.parent
+            p.left = temp.right
+            del temp
+        elif l is not None:
+            temp = l
+            while temp.right is not None:
+                temp = temp.right
+
+            root.key = temp.key
+
+            p = temp.parent
+            temp.right = temp.left
+            del temp
+
+        else:
+            #no child (leaf node)
+            if root is self.head:
+                del root
+                self.head = None
+                return
+            
+            if root is root.parent.left:
+                root.parent.left = None
+            else:
+                root.parent.right = None
+
+        #now rotation part
+                
+
+
+        
+
     def getHeight(self, root):
         if root is None:
             return -1
@@ -64,14 +208,18 @@ class Tree:
         
 
 root = Tree()
+root.insert(4)
 root.insert(6)
-root.insert(7)
-root.insert(5)
-root.insert(8)
+root.insert(3)
+root.insert(2)
 root.insert(1)
+root.delete(root.findNode(root.head,4))
+# root.insert(9)
 root.printTree(root.head)
 print()
-print(root.getBalance(root.head))
+# root.rightrotate(root.head)
+# root.printTree(root.head)
+# print()
 # print(root.head.right.parent.left.key)
 
     
