@@ -153,19 +153,45 @@ class Tree:
             #changing the value of the to-be deleted node
             root.key = temp.key
 
-            p = temp.parent
-            p.left = temp.right
-            del temp
+            if temp is r:
+                #right child has no left subtree
+                r.left = root.left
+                p = root.parent
+                if p is None:
+                    self.head = r
+                elif p.right == root:
+                    p.right = r
+                else:
+                    p.left = r
+
+                del root
+                
+            else:    
+                p = temp.parent
+                p.left = temp.right
+                del temp
+            
         elif l is not None:
             temp = l
             while temp.right is not None:
                 temp = temp.right
 
             root.key = temp.key
+            if temp is l:
+                l.right = root.right
+                p = root.parent
+                if p is None:
+                    self.head = l
+                elif p.right == root:
+                    p.right = l
+                else:
+                    p.left = l
 
-            p = temp.parent
-            temp.right = temp.left
-            del temp
+                del root
+            else:
+                p = temp.parent
+                temp.right = temp.left
+                del temp
 
         else:
             #no child (leaf node)
@@ -213,7 +239,9 @@ root.insert(6)
 root.insert(3)
 root.insert(2)
 root.insert(1)
-root.delete(root.findNode(root.head,4))
+root.printTree(root.head)
+print()
+root.delete(root.findNode(root.head,2))
 # root.insert(9)
 root.printTree(root.head)
 print()
